@@ -11,9 +11,6 @@
 
 <body>
     <input type="checkbox" id="start" class="si">
-    <input type="radio" name="lane" id="lane-1" class="si">
-    <input type="radio" name="lane" id="lane-2" class="si" checked>
-    <input type="radio" name="lane" id="lane-3" class="si">
 
     <div class="screen start-screen">
         <div class="start-bg"></div>
@@ -25,7 +22,7 @@
             <p class="tagline">ARCADE RACER</p>
             <label for="start" class="btn-start">▶ INSERT COIN</label>
             <div class="how">
-                <p>◀ ▶ ARROW KEYS OR CLICK LANES</p>
+                <p>MOVE YOUR MOUSE TO STEER</p>
                 <p>DODGE THE TRAFFIC!</p>
             </div>
         </div>
@@ -49,10 +46,6 @@
             <div class="road-edge er"></div>
             <div class="lane-line ll1"></div>
             <div class="lane-line ll2"></div>
-
-            <label for="lane-1" class="zone z1"></label>
-            <label for="lane-2" class="zone z2"></label>
-            <label for="lane-3" class="zone z3"></label>
 
             <div class="pcar">
                 <div class="pw"></div>
@@ -87,22 +80,31 @@
                     <div class="sfill"></div>
                 </div>
             </div>
-
-        </div>
-
-        <div class="controls">
-            <label for="lane-1" class="cb">◀</label>
-            <label for="lane-2" class="cb">▼</label>
         </div>
     </div>
 
     <script>
         document.getElementById('start').onchange = function () {
             if (!this.checked) return;
-            var i = setInterval(function () { var p = document.querySelector('.pcar').getBoundingClientRect(); var c = document.querySelectorAll('.ecar'); for (var j = 0; j < c.length; j++) { var r = c[j].getBoundingClientRect(); if (p.left + 8 < r.right && p.right - 8 > r.left && p.top + 8 < r.bottom && p.bottom - 8 > r.top) { clearInterval(i); location.href = 'gameover.html'; } } }, 30);
+            var road = document.querySelector('.road');
+            var car = document.querySelector('.pcar');
+            var cw = 46;
+            road.onmousemove = function (e) {
+                var r = road.getBoundingClientRect();
+                var x = e.clientX - r.left - cw / 2;
+                x = Math.max(10, Math.min(x, r.width - cw - 10));
+                car.style.left = x + 'px';
+            };
+            road.ontouchmove = function (e) {
+                var r = road.getBoundingClientRect();
+                var x = e.touches[0].clientX - r.left - cw / 2;
+                x = Math.max(10, Math.min(x, r.width - cw - 10));
+                car.style.left = x + 'px';
+                e.preventDefault();
+            };
+            var i = setInterval(function () { var p = car.getBoundingClientRect(); var c = document.querySelectorAll('.ecar'); for (var j = 0; j < c.length; j++) { var r = c[j].getBoundingClientRect(); if (p.left + 8 < r.right && p.right - 8 > r.left && p.top + 8 < r.bottom && p.bottom - 8 > r.top) { clearInterval(i); location.href = 'gameover.html'; } } }, 30);
         };
     </script>
 </body>
 
 </html>
-
